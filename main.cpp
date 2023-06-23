@@ -2,21 +2,21 @@
 
 int main(int, char*[])
 {
-	Node* Root{ new Node(0, 0)};
-	Root->insert(1, 0);
-	Root->insert(12, 0);
-	Root->insert(12, 0);
-	Root->insert(7, 0);
-	Root->insert(8, 0);
-	Root->insert(3, 0);
-	Root->insert(4, 0);
+	Node* root{ new Node(0, 0)};
+	root->insert(1, 0);
+	root->insert(12, 0);
+	root->insert(12, 0);
+	root->insert(7, 0);
+	root->insert(8, 0);
+	root->insert(3, 0);
+	root->insert(4, 0);
 	printf("Bypass of binary tree:\n");
-	Root->bypassReverse();
+	root->bypassWide();
 	printf("\n================================================================\n");
-	Root->remove(7);
+	root->remove(7);
 	printf("Bypass of binary tree after delete node \"7\":\n");
-	Root->bypassReverse();
-	delete Root;
+	printf("\n[%i]", root->bypassWide() - 1);
+	delete root;
 	return 0;
 }
 

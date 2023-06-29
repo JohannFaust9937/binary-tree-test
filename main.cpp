@@ -2,7 +2,7 @@
 
 int main(int, char*[])
 {
-	Node* root{ new Node(0, 0)};
+	Node* root{ new Node(0, 0, true)};
 	root->insert(1, 0);
 	root->insert(12, 0);
 	root->insert(12, 0);
@@ -13,9 +13,11 @@ int main(int, char*[])
 	printf("Bypass of binary tree:\n");
 	root->bypassWide();
 	printf("\n================================================================\n");
-	root->remove(7);
-	printf("Bypass of binary tree after delete node \"7\":\n");
+	root->remove(4);
+	printf("Bypass of binary tree after delete node \"4\":\n");
 	printf("\n[%i]", root->bypassWide() - 1);
+	printf("\n[%p]", root->searchDescendant(1)->left);
+	
 	delete root;
 	return 0;
 }

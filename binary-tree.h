@@ -2,11 +2,12 @@
 #include <cstdio>
 
 struct Node {
+	bool root{ false };
 	int key{ 0 }, value{ 0 };
-	Node* left{ nullptr }, * right{ nullptr };
+	Node * left{ nullptr }, * right{ nullptr };
 
 	Node() = default;
-	Node(int key, int value) : key{ key }, value{ value } {}
+	Node(int key, int value, bool root = false) : key{ key }, value{ value }, root{ root } {}
 	~Node() {}
 
 	void insert(int key, int value) {
@@ -24,25 +25,52 @@ struct Node {
 		}
 	}
 
-	Node* search(int key) {
+	Node* searchDescendant(int key) {
 		if (key == this->key)
 			return this;
-		else if (key < this->key && left != nullptr)
-			left->search(key);
-		else if (key > this->key && right != nullptr)
-			right->search(key);
+		else if (this->left && key < this->key)
+			this->left->searchDescendant(key);
+		else if (this->right && key > this->key)
+			this->right->searchDescendant(key);
 		else
 			return nullptr;
 	}
 
+	Node* searchAscendant(int key) {
+
+		// Базовые случай для рекурсии
+		if (this->key == key && this->root)
+			return this;
+		
+		// Для первого уровня потомков от Root
+		if (key < this->key && this->left && this->root)
+			this->left->searchAscendant(key);
+		else if (key > this->key && this->right && this->root)
+			this->right->searchAscendant(key);
+
+		// Для второго и остальных уровней потомков от Root
+			// Случаи для варианта, когда и левый и правый потомок существуют
+		if (left && right) {
+
+		}
+			// Случаи для левого потомка при его наличии
+		if (left ) {
+
+		}
+			// Случаи для правого потомка при его наличии
+		if (right) {
+
+		}
+	}
+	
 	Node* getMin() {
-		if (left != nullptr)
+		if (left)
 			return left->getMin();
 		return this;
 	}
 
 	Node* getMax() {
-		if (right != nullptr)
+		if (right)
 			return right->getMax();
 		return this;
 	}
@@ -51,7 +79,7 @@ struct Node {
 		const unsigned short max_size{ 65535 };
 		Node** queue{ new Node*[max_size] } ;
 		int begin{ 0 }, end{ 0 };
-
+		
 		queue[end++] = this;
 		while (begin < end) {
 			Node* current{ queue[begin++] };
@@ -62,8 +90,9 @@ struct Node {
 				queue[end++] = current->right;
 		}
 		delete[] queue;
+		return end;
 	}
-
+	
 	void bypassLCR() {
 		if (this->left)
 			left->bypassLCR();
@@ -80,7 +109,7 @@ struct Node {
 		printf("%u ", this->key);
 	}
 
-	void bypassLRC() {
+	void bypassLRC() { 
 		printf("%u ", this->key);
 		if (this->left)
 			left->bypassLRC();
@@ -89,24 +118,10 @@ struct Node {
 	}
 
 	void remove(int key) {
-		// Looking for the case of deleting a node with two descendants
-	}
-
-	void remove_leaf(int key) {
-		if (this->left && this->left->key == key) {
-			delete this->left;
-			this->left = nullptr;
-		}
-		else if (this->right && this->right->key == key) {
-			delete this->right;
-			this->right = nullptr;
-		}
-		else {
-			if (key < this->key && this->left)
-				this->left->remove(key);
-			else if (key > this->key && this->right)
-				this->right->remove(key);
+		Node* current{ searchDescendant(key) };
+		if (!current->left && !current->right) {
+			delete current;
+			current = nullptr;
 		}
 	}
-			
 };
